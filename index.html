@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Place searches</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <meta charset="utf-8"/>
+    <!-- <script src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script> -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8AKyeEzAyblFgHPaepscMyK2TFCOQ_Bw&libraries=places&callback=initMap" async defer></script>
+    <script type="text/javascript" src="script.js"></script>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+   
+              
+                  <div class="form-style-5">
+                    <fieldset>
+                    <legend><span class="number"></span> Location Search</legend>
+                    <input type="text" id="interest" name="interest" placeholder="Enter Location *">
+                    
+                    <label for="distance">Distance:</label>
+                    <select onchange="getLocations()" id="distance" name="field4" >
+                    <optgroup label="distance">
+                      <option value="1000">1 Mile</option>
+                      <option value="5000">5 Miles</option>
+                      <option value="10000">10 Miles</option>
+                      <option value="20000">20 Miles</option>
+                    </optgroup>
+                  
+                  </select>    
+                  <button onclick="getLocations()">Search</button>
+                  </fieldset>      
+          </div>
+      
+   
+    <div id="mapArea" ></div>
+
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8AKyeEzAyblFgHPaepscMyK2TFCOQ_Bw&libraries=places" async defer></script> -->
+    
+  </body>
+</html>

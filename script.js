@@ -36,10 +36,12 @@ function onSuccess(position){
   };
 
   map = new google.maps.Map(document.getElementById("mapArea"), mapOptions);
-  var marker = new google.maps.Marker({
+  var myLoc = new google.maps.Marker({
       position: myLocation,
       map: map,
   });
+  google.maps.event.addDomListener(window, 'resize', initialize);
+  markers.push(myLoc);
 }
 
 function onError(error){
@@ -48,10 +50,9 @@ function onError(error){
 }
 
 function getLocations(){
+  clearMarkers();
   interest = document.getElementById("interest").value;
   distance = document.getElementById("distance").value;
-  console.log(interest)
-    
   findPlaces();
 }
 
@@ -92,6 +93,7 @@ function drawMarker(obj){
   });
 
   markers.push(marker);
+
   var infoWindow = new google.maps.InfoWindow({
     content: '<img src="' + obj.icon + '"/><font style="color:gray">' +
     obj.name + '<br />Rating: ' + obj.rating +

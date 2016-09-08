@@ -3,35 +3,39 @@ var myLocation, distance, interest, map;
 
 var markers = new Array();
 
-window.onload = function(){
+window.onload = function()
+{
   initMap();
 }
 
-function initMap() {
+function initMap()
+{
   //initilize map in San Francisco
    map = new google.maps.Map(document.getElementById("mapArea"), {
     center: {lat: 37.774929, lng: -122.419416},
-    zoom: 15
+    zoom: 16
   });
   drawMap();
 }
 
-function drawMap(){ 
+function drawMap()
+{ 
   if (navigator.geolocation){
     navigator.geolocation.getCurrentPosition(onSuccess, onError);
   }
   else
-    error('Geo Location is not supported');
+    alert("Geo Location is not supported");
 }
 
-function onSuccess(position){
+function onSuccess(position)
+{
   var lat = position.coords.latitude;
   var long = position.coords.longitude;
   myLocation = new google.maps.LatLng(lat, long);
 
   var mapOptions = {
     center: myLocation,
-    zoom: 11,
+    zoom: 16,
     mapTypeId:google.maps.MapTypeId.ROADMAP
   };
 
@@ -40,23 +44,28 @@ function onSuccess(position){
       position: myLocation,
       map: map,
   });
-  google.maps.event.addDomListener(window, 'resize', initialize);
-  markers.push(myLoc);
+}
+// Popup div
+function onError(error)
+{
+  if(error.code === "PERMISSION_DENIED")
+    alert("User denied permission");
+  else if(error.code === "TIMEOUT:")
+    alert("Geolocation timed out");
+  else
+    alert("Geolocation Error");
 }
 
-function onError(error){
-
-
-}
-
-function getLocations(){
+function getLocations()
+{
   clearMarkers();
   interest = document.getElementById("interest").value;
   distance = document.getElementById("distance").value;
   findPlaces();
 }
-
-function findPlaces(){
+// Drag the map find where the maps is.
+function findPlaces()
+{
   var request = {
     location: myLocation,
     radius: distance,
@@ -66,7 +75,8 @@ function findPlaces(){
   service.nearbySearch(request, createMarkers);
 }
 
-function createMarkers(response, status){
+function createMarkers(response, status)
+{
   var latlngbounds = new google.maps.LatLngBounds();
 
   if (status == google.maps.places.PlacesServiceStatus.OK){
@@ -86,7 +96,9 @@ function createMarkers(response, status){
   }
 }
 
-function drawMarker(obj){
+function drawMarker(obj)
+{
+  var placesList = document.getElementById("places");
   var marker = new google.maps.Marker({
     position:obj.geometry.location,
     map:map
@@ -94,18 +106,23 @@ function drawMarker(obj){
 
   markers.push(marker);
 
+//TODO: Check for rating before display
   var infoWindow = new google.maps.InfoWindow({
     content: '<img src="' + obj.icon + '"/><font style="color:gray">' +
     obj.name + '<br />Rating: ' + obj.rating +
-    '<br />Vicinity: ' + obj.vicinity + '</font>'
+    '<br />Address: ' + obj.vicinity + '</font>'
   });
+
+  placesList.innerHTML += '<li>' + obj.name + 
+  '<br />Address: ' + obj.vicinity + '</li>' + '<br />';
 
   google.maps.event.addListener(marker, 'click', function(){
     infoWindow.open(map, marker);
   });
 }
 
-function clearMarkers(){
+function clearMarkers()
+{
   if (markers){
     for(i in markers){
       markers[i].setMap(null);
@@ -113,8 +130,15 @@ function clearMarkers(){
     markers = [];
   }
 }
+//TODO: Make sure its connected and it works.
 
-function resize() {
-  map.setCenter(map_center);
-  map.fitBounds(path_bounds);
+
+function myFunction() 
+{
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+      x.className += " responsive";
+  } else {
+      x.className = "topnav";
+  }
 }

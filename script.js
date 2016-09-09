@@ -5,7 +5,9 @@ var markers = [];
 
 window.onload = function()
 {
+  // document.getElementsByClassName("form-style result")[0].style.visibility = "hidden";
   initMap();
+
 }
 
 function initMap()
@@ -143,6 +145,10 @@ function clearMarkers()
     }
     markers = [];
   }
+  
+  var placesList = document.getElementById("places");
+  placesList.innerHTML = '';
+
 }
 //TODO: Make sure its connected and it works.
 

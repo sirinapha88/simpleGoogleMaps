@@ -1,5 +1,5 @@
 
-var myLocation, distance, interest, map, infoWindow;
+var myLocation, distance, interest, map, merkerContent;
 
 var markers = [];
 
@@ -44,6 +44,7 @@ function onSuccess(position)
       position: myLocation,
       map: map,
   });
+  markers.push(myLoc);
 }
 // Popup div
 function onError(error)
@@ -106,11 +107,13 @@ function drawMarker(obj)
 
   markers.push(marker);
 //TODO: Check for rating before display
-  infoWindow = new google.maps.InfoWindow({
+  var infoWindow = new google.maps.InfoWindow({
     content: '<img src="' + obj.icon + '"/><font style="color:gray">' +
     obj.name + '<br />Rating: ' + obj.rating +
     '<br />Address: ' + obj.vicinity + '</font>'
   });
+
+  merkerContent = infoWindow;
 
   google.maps.event.addListener(marker, 'click', function(){
     infoWindow.open(map, marker);
@@ -121,7 +124,9 @@ function createMarkerButton(marker)
 {
   var placesList = document.getElementById("places");
   var li = document.createElement("li");
-  var title = infoWindow.content;
+
+  var title = merkerContent.content;
+  console.log(title);
   li.innerHTML = title;
   placesList.appendChild(li);
     

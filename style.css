@@ -142,9 +142,9 @@ input[type=text]:focus {
   border-width: 1px 1px 3px;
   margin-bottom: 5px;
 } 
-.form-style.result fieldset{
+/*.form-style.result fieldset{
   display: none !important;
-}
+}*/
 ul #places{
   list-style-type: none;
   padding: 0;

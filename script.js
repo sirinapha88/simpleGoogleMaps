@@ -1,7 +1,7 @@
 
-var myLocation, distance, interest, map;
+var myLocation, distance, interest, map, infoWindow;
 
-var markers = new Array();
+var markers = [];
 
 window.onload = function()
 {
@@ -13,7 +13,7 @@ function initMap()
   //initilize map in San Francisco
    map = new google.maps.Map(document.getElementById("mapArea"), {
     center: {lat: 37.774929, lng: -122.419416},
-    zoom: 16
+    zoom: 12
   });
   drawMap();
 }
@@ -85,6 +85,7 @@ function createMarkers(response, status)
     for(var i=0;i<response.length;i++){
       drawMarker(response[i]);
       latlngbounds.extend(response[i].geometry.location);
+      createMarkerButton(markers[i])
     }
     map.fitBounds(latlngbounds);
   } 
@@ -98,26 +99,34 @@ function createMarkers(response, status)
 
 function drawMarker(obj)
 {
-  var placesList = document.getElementById("places");
   var marker = new google.maps.Marker({
     position:obj.geometry.location,
     map:map
   });
 
   markers.push(marker);
-
 //TODO: Check for rating before display
-  var infoWindow = new google.maps.InfoWindow({
+  infoWindow = new google.maps.InfoWindow({
     content: '<img src="' + obj.icon + '"/><font style="color:gray">' +
     obj.name + '<br />Rating: ' + obj.rating +
     '<br />Address: ' + obj.vicinity + '</font>'
   });
 
-  placesList.innerHTML += '<li>' + obj.name + 
-  '<br />Address: ' + obj.vicinity + '</li>' + '<br />';
-
   google.maps.event.addListener(marker, 'click', function(){
     infoWindow.open(map, marker);
+  });
+}
+
+function createMarkerButton(marker) 
+{
+  var placesList = document.getElementById("places");
+  var li = document.createElement("li");
+  var title = infoWindow.content;
+  li.innerHTML = title;
+  placesList.appendChild(li);
+    
+  google.maps.event.addDomListener(li, "click", function(){
+    google.maps.event.trigger(marker, "click");
   });
 }
 

@@ -150,8 +150,6 @@ function clearMarkers()
   placesList.innerHTML = '';
 
 }
-//TODO: Make sure its connected and it works.
-
 
 function myFunction() 
 {

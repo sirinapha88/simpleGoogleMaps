@@ -1,5 +1,5 @@
 
-var myLocation, distance, interest, map, merkerContent;
+var myLocation, distance, interest, map, infoWnd;
 
 var markers = [];
 
@@ -18,6 +18,7 @@ function initMap()
     zoom: 12
   });
   drawMap();
+  
 }
 
 function drawMap()
@@ -108,18 +109,23 @@ function drawMarker(obj)
   });
 
   markers.push(marker);
+
 //TODO: Check for rating before display
-  var infoWindow = new google.maps.InfoWindow({
+ infoWnd = new google.maps.InfoWindow({
     content: '<img src="' + obj.icon + '"/><font style="color:gray">' +
     obj.name + '<br />Rating: ' + obj.rating +
     '<br />Address: ' + obj.vicinity + '</font>'
   });
 
-  merkerContent = infoWindow;
+  // var merkerContent = infoWnd;
 
   google.maps.event.addListener(marker, 'click', function(){
-    infoWindow.open(map, marker);
+    infoWnd.setContent('<img src=\"' + obj.icon + '\"/><font style="color:gray">' +
+    obj.name + '<br />Rating: ' + obj.rating +
+    '<br />Address: ' + obj.vicinity + '</font>')
+    infoWnd.open(map, marker);
   });
+  return marker;
 }
 
 function createMarkerButton(marker) 
@@ -127,7 +133,7 @@ function createMarkerButton(marker)
   var placesList = document.getElementById("places");
   var li = document.createElement("li");
 
-  var title = merkerContent.content;
+  var title = infoWnd.content;
   console.log(title);
   li.innerHTML = title;
   placesList.appendChild(li);

@@ -33,7 +33,7 @@
       </div>
       
       <div class="form-style" class="col-1-3">
-        <fieldset>
+        <fieldset class="searchBox">
           <legend><span class="number"></span> Location Search</legend>
           <input type="text" id="interest" name="interest" placeholder="Enter Location *">        
           <label for="distance">Distance:</label>
@@ -46,13 +46,13 @@
           </select>    
           <button onclick="getLocations()">Search</button>
         </fieldset>   
-        <div class="form-style result">
-          <fieldset>
+        
+          <fieldset class="result">
             <legend><span class="number"></span> Results</legend>
             <ul id="places">
             </ul>
           </fieldset>
-        </div> <!-- end form-style -->
+         <!-- end form-style -->
       </div>  <!-- end form-style  col-1-3-->
     </div>  <!-- end grid -->   
   </body>

@@ -167,9 +167,12 @@ input[type=text]:focus
   border-width: 1px 1px 3px;
   margin-bottom: 5px;
 } 
+.searchBox{
+  height: 300px;
+}
 .result
 {
-  max-height:600px !important; 
+  height: 650px;
   overflow: scroll;
 }
 

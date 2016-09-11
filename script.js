@@ -120,7 +120,8 @@ function drawMarker(obj)
   // var merkerContent = infoWnd;
 
   google.maps.event.addListener(marker, 'click', function(){
-    infoWnd.setContent('<img src=\"' + obj.icon + '\"/><font style="color:gray">' +
+    infoWnd.setContent("<strong>" + obj.name + "</title>")
+    ('<img src=\"' + obj.icon + '\"/><font style="color:gray">' +
     obj.name + '<br />Rating: ' + obj.rating +
     '<br />Address: ' + obj.vicinity + '</font>')
     infoWnd.open(map, marker);

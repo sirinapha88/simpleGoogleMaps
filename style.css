@@ -20,7 +20,7 @@ html, body
 #mapArea
 {
   overflow:hidden;
-  padding-bottom:56.25%;
+  padding-bottom:55%;
   position:relative;
   height:0;
 }

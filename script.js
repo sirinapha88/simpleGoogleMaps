@@ -1,169 +1,241 @@
-
-var myLocation, distance, interest, map, infoWnd;
-
+var map, places, infoWindow;
 var markers = [];
+var autocomplete;
+var countryRestrict = {'country': 'us'};
+var MARKER_PATH = 'https://maps.gstatic.com/intl/en_us/mapfiles/marker_green';
+var hostnameRegexp = new RegExp('^https?://.+?/');
 
-window.onload = function()
-{
-  // document.getElementsByClassName("form-style result")[0].style.visibility = "hidden";
-  initMap();
-
-}
-
-function initMap()
-{
-  //initilize map in San Francisco
-   map = new google.maps.Map(document.getElementById("mapArea"), {
-    center: {lat: 37.774929, lng: -122.419416},
-    zoom: 12
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 10,
+    center: {lat: 37.1, lng: -95.7},
+    mapTypeControl: false,
+    panControl: false,
+    zoomControl: true,
+    streetViewControl: false
   });
-  drawMap();
-  
-}
 
-function drawMap()
-{ 
-  if (navigator.geolocation){
-    navigator.geolocation.getCurrentPosition(onSuccess, onError);
+  infoWindow = new google.maps.InfoWindow({
+    content: document.getElementById('info-content')
+  });
+
+// Try HTML5 geolocation.
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+
+      infoWindow.setPosition(pos);
+      //infoWindow.setContent('Location found.');
+      map.setZoom(16);
+      map.setCenter(pos);
+      document.getElementById('autocomplete').placeholder = 'Current Location';
+    }, function() {
+      handleLocationError(true, infoWindow, map.getCenter());
+    });
+  } else {
+    // Browser doesn't support Geolocation
+    handleLocationError(false, infoWindow, map.getCenter());
   }
-  else
-    alert("Geo Location is not supported");
-}
 
-function onSuccess(position)
-{
-  var lat = position.coords.latitude;
-  var long = position.coords.longitude;
-  myLocation = new google.maps.LatLng(lat, long);
+  // Create the autocomplete object and associate it with the UI input control.
+  // Restrict the search to the default country, and to place type "cities".
+  autocomplete = new google.maps.places.Autocomplete(
+      /** @type {!HTMLInputElement} */ (
+          document.getElementById('autocomplete')), {
+        componentRestrictions: countryRestrict
+      });
+  places = new google.maps.places.PlacesService(map);
 
-  var mapOptions = {
-    center: myLocation,
-    zoom: 16,
-    mapTypeId:google.maps.MapTypeId.ROADMAP
-  };
-
-  map = new google.maps.Map(document.getElementById("mapArea"), mapOptions);
-  var myLoc = new google.maps.Marker({
-      position: myLocation,
-      map: map,
-  });
-  markers.push(myLoc);
-}
-// Popup div
-function onError(error)
-{
-  if(error.code === "PERMISSION_DENIED")
-    alert("User denied permission");
-  else if(error.code === "TIMEOUT:")
-    alert("Geolocation timed out");
-  else
-    alert("Geolocation Error");
-}
-
-function getLocations()
-{
-  clearMarkers();
-  interest = document.getElementById("interest").value;
-  distance = document.getElementById("distance").value;
-  findPlaces();
-}
-// Drag the map find where the maps is.
-function findPlaces()
-{
-  var request = {
-    location: myLocation,
-    radius: distance,
-    type:interest
-  };
-  var service = new google.maps.places.PlacesService(map);
-  service.nearbySearch(request, createMarkers);
-}
-
-function createMarkers(response, status)
-{
-  var latlngbounds = new google.maps.LatLngBounds();
-
-  if (status == google.maps.places.PlacesServiceStatus.OK){
-    clearMarkers();
+  autocomplete.addListener('place_changed', onPlaceChanged);
   
-    for(var i=0;i<response.length;i++){
-      drawMarker(response[i]);
-      latlngbounds.extend(response[i].geometry.location);
-      createMarkerButton(markers[i])
+  var button = document.getElementById('searchButton');
+  button.addEventListener('click', searchClick);
+}
+
+function searchClick()
+{
+  search();
+}
+
+// When the user selects a city, get the place details for the city and
+// zoom the map in on the city.
+function onPlaceChanged() {
+  var place = autocomplete.getPlace();
+  if (place.geometry) {
+    map.panTo(place.geometry.location);
+    search();
+  } else {
+    document.getElementById('autocomplete').placeholder = 'Current Location';
+  }
+}
+
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+  infoWindow.setPosition(pos);
+  infoWindow.setContent(browserHasGeolocation ?
+                        'Error: The Geolocation service failed.' :
+                        'Error: Your browser doesn\'t support geolocation.');
+}
+
+// Search for hotels in the selected city, within the viewport of the map.
+function search() {
+  var search = {
+    bounds: map.getBounds(),
+    keyword: document.getElementById("findWhat").value
+  };
+
+  places.nearbySearch(search, function(results, status) {
+    if (status === google.maps.places.PlacesServiceStatus.OK) {
+      clearResults();
+      clearMarkers();
+      // Create a marker for each hotel found, and
+      // assign a letter of the alphabetic to each marker icon.
+      for (var i = 0; i < results.length; i++) {
+        var markerLetter = String.fromCharCode('A'.charCodeAt(0) + i);
+        var markerIcon = MARKER_PATH + markerLetter + '.png';
+        // Use marker animation to drop the icons incrementally on the map.
+        markers[i] = new google.maps.Marker({
+          position: results[i].geometry.location,
+          animation: google.maps.Animation.DROP,
+          icon: markerIcon
+        });
+        // If the user clicks a hotel marker, show the details of that hotel
+        // in an info window.
+        markers[i].placeResult = results[i];
+        google.maps.event.addListener(markers[i], 'click', showInfoWindow);
+        setTimeout(dropMarker(i), i * 100);
+        addResult(results[i], i);
+      }
     }
-    map.fitBounds(latlngbounds);
-  } 
-  else if (status == google.maps.places.PlacesServiceStatus.ZERO_RESULTS){
-    alert("Sorry, there is no matching result!!");
-  } 
-  else{
-    alert("Sorry, there is some error!!!");
-  }
-}
-
-function drawMarker(obj)
-{
-  var marker = new google.maps.Marker({
-    position:obj.geometry.location,
-    map:map
-  });
-
-  markers.push(marker);
-
-//TODO: Check for rating before display
- infoWnd = new google.maps.InfoWindow({
-    content: '<img src="' + obj.icon + '"/><font style="color:gray">' +
-    obj.name + '<br />Rating: ' + obj.rating +
-    '<br />Address: ' + obj.vicinity + '</font>'
-  });
-
-  // var merkerContent = infoWnd;
-
-  google.maps.event.addListener(marker, 'click', function(){
-    infoWnd.setContent("<strong>" + obj.name + "</title>")
-    ('<img src=\"' + obj.icon + '\"/><font style="color:gray">' +
-    obj.name + '<br />Rating: ' + obj.rating +
-    '<br />Address: ' + obj.vicinity + '</font>')
-    infoWnd.open(map, marker);
-  });
-  return marker;
-}
-
-function createMarkerButton(marker) 
-{
-  var placesList = document.getElementById("places");
-  var li = document.createElement("li");
-
-  var title = infoWnd.content;
-  console.log(title);
-  li.innerHTML = title;
-  placesList.appendChild(li);
-    
-  google.maps.event.addDomListener(li, "click", function(){
-    google.maps.event.trigger(marker, "click");
   });
 }
 
-function clearMarkers()
-{
-  if (markers){
-    for(i in markers){
+function clearMarkers() {
+  for (var i = 0; i < markers.length; i++) {
+    if (markers[i]) {
       markers[i].setMap(null);
     }
-    markers = [];
   }
-  
-  var placesList = document.getElementById("places");
-  placesList.innerHTML = '';
-
+  markers = [];
 }
 
-function myFunction() 
-{
-  var x = document.getElementById("myTopnav");
-  if (x.className === "topnav") {
-      x.className += " responsive";
+// Set the country restriction based on user input.
+// Also center and zoom the map on the given country.
+function setAutocompleteCountry() {
+  var country = document.getElementById('country').value;
+  if (country == 'all') {
+    autocomplete.setComponentRestrictions([]);
+    map.setCenter({lat: 15, lng: 0});
+    map.setZoom(2);
   } else {
-      x.className = "topnav";
+    autocomplete.setComponentRestrictions({'country': country});
+    map.setCenter(countries[country].center);
+    map.setZoom(countries[country].zoom);
+  }
+  clearResults();
+  clearMarkers();
+}
+
+function dropMarker(i) {
+  return function() {
+    markers[i].setMap(map);
+  };
+}
+
+function addResult(result, i) {
+  var results = document.getElementById('results');
+  var markerLetter = String.fromCharCode('A'.charCodeAt(0) + i);
+  var markerIcon = MARKER_PATH + markerLetter + '.png';
+
+  var tr = document.createElement('tr');
+  tr.style.backgroundColor = (i % 2 === 0 ? '#F0F0F0' : '#FFFFFF');
+  tr.onclick = function() {
+    google.maps.event.trigger(markers[i], 'click');
+  };
+
+  var iconTd = document.createElement('td');
+  var nameTd = document.createElement('td');
+  var icon = document.createElement('img');
+  icon.src = markerIcon;
+  icon.setAttribute('class', 'placeIcon');
+  icon.setAttribute('className', 'placeIcon');
+  var name = document.createTextNode(result.name);
+  iconTd.appendChild(icon);
+  nameTd.appendChild(name);
+  tr.appendChild(iconTd);
+  tr.appendChild(nameTd);
+  results.appendChild(tr);
+}
+
+function clearResults() {
+  var results = document.getElementById('results');
+  while (results.childNodes[0]) {
+    results.removeChild(results.childNodes[0]);
+  }
+}
+
+// Get the place details for a hotel. Show the information in an info window,
+// anchored on the marker for the hotel that the user selected.
+function showInfoWindow() {
+  var marker = this;
+  places.getDetails({placeId: marker.placeResult.place_id},
+      function(place, status) {
+        if (status !== google.maps.places.PlacesServiceStatus.OK) {
+          return;
+        }
+        infoWindow.open(map, marker);
+        buildIWContent(place);
+      });
+}
+
+// Load the place information into the HTML elements used by the info window.
+function buildIWContent(place) {
+  document.getElementById('iw-icon').innerHTML = '<img class="hotelIcon" ' +
+      'src="' + place.icon + '"/>';
+  document.getElementById('iw-url').innerHTML = '<b><a href="' + place.url +
+      '">' + place.name + '</a></b>';
+  document.getElementById('iw-address').textContent = place.vicinity;
+
+  if (place.formatted_phone_number) {
+    document.getElementById('iw-phone-row').style.display = '';
+    document.getElementById('iw-phone').textContent =
+        place.formatted_phone_number;
+  } else {
+    document.getElementById('iw-phone-row').style.display = 'none';
+  }
+
+  // Assign a five-star rating to the hotel, using a black star ('&#10029;')
+  // to indicate the rating the hotel has earned, and a white star ('&#10025;')
+  // for the rating points not achieved.
+  if (place.rating) {
+    var ratingHtml = '';
+    for (var i = 0; i < 5; i++) {
+      if (place.rating < (i + 0.5)) {
+        ratingHtml += '&#10025;';
+      } else {
+        ratingHtml += '&#10029;';
+      }
+    document.getElementById('iw-rating-row').style.display = '';
+    document.getElementById('iw-rating').innerHTML = ratingHtml;
+    }
+  } else {
+    document.getElementById('iw-rating-row').style.display = 'none';
+  }
+
+  // The regexp isolates the first part of the URL (domain plus subdomain)
+  // to give a short URL for displaying in the info window.
+  if (place.website) {
+    var fullUrl = place.website;
+    var website = hostnameRegexp.exec(place.website);
+    if (website === null) {
+      website = 'http://' + place.website + '/';
+      fullUrl = website;
+    }
+    document.getElementById('iw-website-row').style.display = '';
+    document.getElementById('iw-website').textContent = website;
+  } else {
+    document.getElementById('iw-website-row').style.display = 'none';
   }
 }

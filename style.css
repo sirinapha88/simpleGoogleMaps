@@ -1,5 +1,4 @@
-html, body 
-{
+html, body {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -17,18 +16,17 @@ html, body
 {
   width: 33.33%;
 }
-#mapArea
-{
+#map {
   overflow:hidden;
   padding-bottom:55%;
   position:relative;
   height:0;
 }
-#mapArea iframe
-{
+
+#map iframe{
   left:0;
   top:0;
-  height:100%;
+  height:80%;
   width:100%;
   position:absolute;
 }
@@ -102,7 +100,6 @@ ul.topnav li.icon {display: none;}
 {
   padding: 10px 0px;
   background: #f4f7f8;
-  /*margin: 10px auto;*/
   background: #f4f7f8;
   border-radius: 8px;
   font-family: Georgia, "Times New Roman", Times, serif;
@@ -121,7 +118,7 @@ ul.topnav li.icon {display: none;}
   display: block;
   margin-bottom: 8px;
 }
-.form-style input[type="text"], .form-style select, .form-style #places
+.form-style input[type="text"], .form-style select, #resultsTable
 {
   font-family: Georgia, "Times New Roman", Times, serif;
   background: rgba(255,255,255,.1);
@@ -168,30 +165,45 @@ input[type=text]:focus
   margin-bottom: 5px;
 } 
 .searchBox{
-  height: 300px;
+  height: 280px;
 }
-.result
-{
-  height: 650px;
-  overflow: scroll;
+/*.result{
+  visibility: hidden
+}*/
+#listing{
+  height: 560px;
+  overflow:auto;
 }
-
-#places li 
-{
-  background-color: #f1f1f1;
-  padding: 10px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  overflow-y: scroll;  
-}
-#places li:nth-child(odd) 
-{
-  background-color: #fcfcfc;
+#controls {
+  position: absolute;
+  left: 300px;
+  width: 140px;
+  top: 0px;
+  z-index: 5;
+  background-color: #fff;
 }
 
-ul li img
-{
-  width:40px;
-  height:40px;
+
+.placeIcon {
+  width: 20px;
+  height: 34px;
+  margin: 4px;
+}
+.hotelIcon {
+  width: 24px;
+  height: 24px;
+}
+#rating {
+  font-size: 13px;
+  font-family: Arial Unicode MS;
+}
+.iw_table_row {
+  height: 20px;
+}
+.iw_attribute_name {
+  font-weight: bold;
+  text-align: right;
+}
+.iw_table_icon {
+  text-align: right;
 }

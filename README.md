@@ -2,7 +2,6 @@
 
 # Link
 
-* [gh-page](http://sirinapha88.github.io/simpleGoogleMaps)
 
 - I enjoyed working on this challenge.  I figured that the main yelp screen where you can look for something near an address would be complex enough to show what the challenge asks for.  I have a map with a "Place Search" textbox and a "Nearby" textbox.  The page initializes the map with San Francisco as its center and if enabled, it uses geolocation to zoom in on the user's current location.
 

@@ -68,7 +68,7 @@ ul.topnav li.icon {display: none;}
   }
   ul.topnav.responsive li a {
     display: block;
-    text-align: left;
+    text-align: right;
   }
 }
 .center {

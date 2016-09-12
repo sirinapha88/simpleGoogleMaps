@@ -22,7 +22,6 @@ html, body {
   position:relative;
   height:0;
 }
-
 #map iframe{
   left:0;
   top:0;
@@ -30,7 +29,6 @@ html, body {
   width:100% !important;
   position:absolute;
 }
-
 ul.topnav {
   list-style-type: none;
   margin: 0;
@@ -38,9 +36,7 @@ ul.topnav {
   overflow: hidden;
   background-color: #1abc9c;
 }
-
 ul.topnav li {float: left;}
-
 ul.topnav li a {
   display: inline-block;
   color: #f2f2f2;
@@ -50,11 +46,8 @@ ul.topnav li a {
   transition: 0.3s;
   font-size: 17px;
 }
-
 ul.topnav li a:hover {background-color: #555;}
-
 ul.topnav li.icon {display: none;}
-
 @media screen and (max-width:680px) {
   ul.topnav li:not(:first-child) {display: none;}
   ul.topnav li.icon {
@@ -62,7 +55,6 @@ ul.topnav li.icon {display: none;}
     display: inline-block;
   }
 }
-
 @media screen and (max-width:680px) {
   ul.topnav.responsive {position: relative;}
   ul.topnav.responsive li.icon {
@@ -86,7 +78,6 @@ ul.topnav li.icon {display: none;}
   font-size: 18px;
   color: #f2f2f2;
 }
-
 .form-style {
   padding: 10px 0px;
   background: #f4f7f8;

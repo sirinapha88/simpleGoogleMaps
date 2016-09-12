@@ -30,20 +30,18 @@ html, body {
   width:100% !important;
   position:absolute;
 }
-ul.topnav 
-{
+
+ul.topnav {
   list-style-type: none;
   margin: 0;
   padding: 0;
   overflow: hidden;
   background-color: #1abc9c;
-  font-family: Georgia, "Times New Roman", Times, serif;
 }
 
 ul.topnav li {float: left;}
 
-ul.topnav li a 
-{
+ul.topnav li a {
   display: inline-block;
   color: #f2f2f2;
   text-align: center;
@@ -57,69 +55,57 @@ ul.topnav li a:hover {background-color: #555;}
 
 ul.topnav li.icon {display: none;}
 
-@media screen and (max-width:680px) 
-{
+@media screen and (max-width:680px) {
   ul.topnav li:not(:first-child) {display: none;}
-  ul.topnav li.icon 
-  {
+  ul.topnav li.icon {
     float: right;
     display: inline-block;
   }
 }
 
-@media screen and (max-width:680px) 
-{
+@media screen and (max-width:680px) {
   ul.topnav.responsive {position: relative;}
-  ul.topnav.responsive li.icon 
-  {
+  ul.topnav.responsive li.icon {
     position: absolute;
     right: 0;
     top: 0;
   }
-  ul.topnav.responsive li 
-  {
+  ul.topnav.responsive li {
     float: none;
     display: inline;
   }
-  ul.topnav.responsive li a 
-  {
+  ul.topnav.responsive li a {
     display: block;
     text-align: left;
   }
 }
-.topRight
-{
+.center {
   position: absolute;
   top: 8px;
-  right: 16px;
+  right: 550px;
   font-size: 18px;
   color: #f2f2f2;
 }
 
-.form-style
-{
+.form-style {
   padding: 10px 0px;
   background: #f4f7f8;
   background: #f4f7f8;
   border-radius: 8px;
   font-family: Georgia, "Times New Roman", Times, serif;
 }
-.form-style fieldset
-{
+.form-style fieldset {
   border: none;
 }
-.form-style legend 
-{
+.form-style legend  {
   font-size: 1.4em;
   margin-bottom: 10px;
 }
-.form-style label 
-{
+.form-style label {
   display: block;
   margin-bottom: 8px;
 }
-.form-style input[type="text"], .form-style select, #resultsTable
-{
+.form-style input[type="text"], .form-style select, #resultsTable {
   font-family: Georgia, "Times New Roman", Times, serif;
   background: rgba(255,255,255,.1);
   border: none;
@@ -138,18 +124,15 @@ ul.topnav li.icon {display: none;}
   box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
   margin-bottom: 30px;
 }
-input[type=text]:focus 
-{
+input[type=text]:focus {
   outline: none;
   box-shadow: -8px 10px 0px -7px #4EA6EA, 8px 10px 0px -7px #4EA6EA;
 }
-.form-style select
-{
+.form-style select {
   -webkit-appearance: menulist-button;
   height:35px;
 }
-.form-style button
-{
+.form-style button {
   position: relative;
   display: block;
   padding: 19px 30px 18px 30px;
@@ -164,25 +147,13 @@ input[type=text]:focus
   border-width: 1px 1px 3px;
   margin-bottom: 5px;
 } 
-.searchBox{
+.searchBox {
   height: 280px;
 }
-/*.result{
-  visibility: hidden
-}*/
-#listing{
+#listing {
   height: 560px;
   overflow:auto;
 }
-/*#controls {
-  position: absolute;
-  left: 300px;
-  width: 140px;
-  top: 0px;
-  z-index: 5;
-  background-color: #fff;
-}*/
-
 .placeIcon {
   width: 20px;
   height: 34px;
@@ -196,11 +167,8 @@ input[type=text]:focus
   font-size: 13px;
   font-family: Arial Unicode MS;
 }
-#results tr{
+#results tr {
    height: 60px;
-}
-#results tr:hover{
-  background-color: red;
 }
 .attribute_name {
   font-weight: bold;

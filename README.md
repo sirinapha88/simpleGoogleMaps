@@ -13,5 +13,3 @@
 - I feed the "Place Search" value to the google maps "type" property to narrow the type of places the app shows.  If the user types something in the "Nearby" textbox, the page will center the map on that location and zoom to 15 to show a small area.  I then ask google for a list of places that are visible in the map.
 
 - The results are presented both as markers in the google map, and as items in a list.  If the user clicks on an item in the list, a small info window is placed on the proper marker.
-
-- I built the page to be responsive.

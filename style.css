@@ -26,8 +26,8 @@ html, body {
 #map iframe{
   left:0;
   top:0;
-  height:80%;
-  width:100%;
+  height:100% !important;
+  width:100% !important;
   position:absolute;
 }
 ul.topnav 
@@ -174,15 +174,14 @@ input[type=text]:focus
   height: 560px;
   overflow:auto;
 }
-#controls {
+/*#controls {
   position: absolute;
   left: 300px;
   width: 140px;
   top: 0px;
   z-index: 5;
   background-color: #fff;
-}
-
+}*/
 
 .placeIcon {
   width: 20px;
@@ -197,13 +196,16 @@ input[type=text]:focus
   font-size: 13px;
   font-family: Arial Unicode MS;
 }
-.iw_table_row {
-  height: 20px;
+#results tr{
+   height: 60px;
 }
-.iw_attribute_name {
+#results tr:hover{
+  background-color: red;
+}
+.attribute_name {
   font-weight: bold;
   text-align: right;
 }
-.iw_table_icon {
+.table_icon {
   text-align: right;
 }
